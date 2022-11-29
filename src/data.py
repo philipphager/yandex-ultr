@@ -1,3 +1,4 @@
+import subprocess
 from pathlib import Path
 from typing import Union, Set, List
 
@@ -21,13 +22,7 @@ def unpack_relevance(query_id, region_id, doc_id, relevance):
 
 
 def count_lines(path: Path):
-    count = 0
-
-    with open(path) as f:
-        for line in f:
-            count += 1
-
-    return count
+    return int(subprocess.check_output(['wc', '-l', path]).split()[0])
 
 
 class YandexRelevanceDataset:
