@@ -21,7 +21,7 @@ def main(config: DictConfig):
     query_ids = relevance_df.query_id.unique()
     click_dataset = instantiate(config.click_dataset, filter_query_ids=query_ids)
     df = click_dataset.load()
-    df.to_parquet(output_path / "clicks.parquet")
+    df.to_parquet(output_path / "clicks.parquet", row_group_size=256)
 
 
 if __name__ == "__main__":
