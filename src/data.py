@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Union, Set, List
 
 import pandas as pd
+from tqdm import tqdm
 
 QUERY_ACTION = "Q"
 CLICK_ACTION = "C"
@@ -17,6 +18,16 @@ def unpack_click(session_id, time_passed, action_type, doc_id):
 
 def unpack_relevance(query_id, region_id, doc_id, relevance):
     return int(query_id), int(doc_id), int(relevance)
+
+
+def count_lines(path: Path):
+    count = 0
+
+    with open(path) as f:
+        for line in f:
+            count += 1
+
+    return count
 
 
 class YandexRelevanceDataset:
@@ -52,11 +63,12 @@ class YandexClickDataset:
     def load(self):
         assert self.path.exists(), f"File not found: {self.path}"
 
+        total_lines = count_lines(self.path)
         rows = []
         query_id = None
 
         with open(self.path, "r") as f:
-            for line in f:
+            for line in tqdm(f, total=total_lines):
                 values = line.rstrip().split("\t")
 
                 if values[2] == QUERY_ACTION:
