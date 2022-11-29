@@ -1,0 +1,16 @@
+# OSX
+.DS_Store
+
+# Pycharm
+.idea
+
+# Datasets
+*.parquet
+*.txt
+
+# Python
+*.pyc
+.ipynb_checkpoints
+
+# Hydra
+outputs/
