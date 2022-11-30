@@ -22,7 +22,7 @@ def unpack_relevance(query_id, region_id, doc_id, relevance):
 
 
 def count_lines(path: Path):
-    return int(subprocess.check_output(['wc', '-l', path]).split()[0])
+    return int(subprocess.check_output(["wc", "-l", path]).split()[0])
 
 
 class YandexRelevanceDataset:
