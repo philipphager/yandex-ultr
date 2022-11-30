@@ -41,7 +41,14 @@ class YandexRelevanceDataset:
                 row = {"query_id": query_id, "doc_id": doc_id, "relevance": relevance}
                 rows.append(row)
 
-        return pd.DataFrame(rows)
+        # Aggregate per query to match the click dataset format:
+        df = pd.DataFrame(rows)
+        df = (
+            df.groupby("query_id")
+            .agg(doc_ids=("doc_id", list), relevance=("relevance", list))
+            .reset_index()
+        )
+        return df
 
 
 class YandexClickDataset:
