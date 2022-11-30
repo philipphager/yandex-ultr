@@ -4,3 +4,17 @@ Parse and preprocess the Yandex relevance prediction dataset from the 2012 editi
 ## Installation
 Create conda environment: `conda env create -f environment.yaml`
 Activate environment: `conda activate yandex-ultr`
+
+## Statistics
+Statistics for the subset of queries that also have relevance annotations:
+
+### Click dataset
+- \# of search queries: 37,469,405
+- \# of unique search queries: 4,991
+- \# of unique documents: 258,393
+- \# of documents per query (min | median | max): 10 | 10 | 10
+
+### Relevance dataset
+- \# of unique queries: 4,991
+- \# of unique documents: 39,949
+- \# of documents per query (min | median | max): 1 | 7 | 90
