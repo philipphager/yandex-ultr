@@ -29,7 +29,10 @@ def main(config: DictConfig):
         document_encoder=document_encoder,
     )
     df = click_dataset.load()
-    df.to_parquet(output_path / "clicks.parquet", row_group_size=256)
+    df.to_parquet(
+        output_path / "clicks.parquet",
+        row_group_size=config.row_group_size,
+    )
 
 
 if __name__ == "__main__":

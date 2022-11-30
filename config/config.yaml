@@ -1,5 +1,6 @@
 dataset_directory: data
 output_directory: data
+row_group_size: 65536 # Number of queries to encode into a single parquet row_block
 
 relevance_dataset:
   _target_: src.data.YandexRelevanceDataset
