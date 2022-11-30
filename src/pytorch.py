@@ -1,3 +1,4 @@
+import logging
 import math
 from abc import ABC
 from pathlib import Path
@@ -8,6 +9,9 @@ from pyarrow import Table
 from pyarrow.parquet import ParquetFile
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import IterableDataset, DataLoader
+
+
+logger = logging.getLogger(__name__)
 
 
 class ParquetDataset(IterableDataset, ABC):
@@ -40,7 +44,7 @@ class ParquetDataset(IterableDataset, ABC):
 
         n_workers, worker_id = self.get_worker_info()
         row_groups = self.get_row_groups(file.num_row_groups, n_workers, worker_id)
-        # logger.info(f"Worker with id: {worker_id} iterating {len(row_groups)} groups")
+        logger.info(f"Worker with id: {worker_id} iterating {len(row_groups)} groups")
 
         return map(self.collate_fn, file.iter_batches(self.batch_size, row_groups))
 
