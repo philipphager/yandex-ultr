@@ -9,3 +9,6 @@ click_dataset:
   _target_: src.data.YandexClickDataset
   path: ${dataset_directory}/YandexClicks.txt
   filter_queries_without_relevance: True
+
+document_encoder: # Optionally encode query, document combinations using unique ids. Turn off by setting to `null`
+  _target_: src.util.LabelEncoder

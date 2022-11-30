@@ -1,9 +1,11 @@
 import subprocess
 from pathlib import Path
-from typing import Union, Set, List
+from typing import Union, Set, List, Optional
 
 import pandas as pd
 from tqdm import tqdm
+
+from src.util import LabelEncoder
 
 QUERY_ACTION = "Q"
 CLICK_ACTION = "C"
@@ -26,8 +28,13 @@ def count_lines(path: Path):
 
 
 class YandexRelevanceDataset:
-    def __init__(self, path: Union[Path, str]):
+    def __init__(
+        self,
+        path: Union[Path, str],
+        document_encoder: Optional[LabelEncoder] = None,
+    ):
         self.path = Path(path)
+        self.document_encoder = document_encoder
 
     def load(self):
         assert self.path.exists(), f"File not found: {self.path}"
@@ -37,6 +44,9 @@ class YandexRelevanceDataset:
             for line in f:
                 values = line.rstrip().split("\t")
                 query_id, doc_id, relevance = unpack_relevance(*values)
+
+                if self.document_encoder is not None:
+                    doc_id = self.document_encoder(f"{query_id}:{doc_id}")
 
                 row = {"query_id": query_id, "doc_id": doc_id, "relevance": relevance}
                 rows.append(row)
@@ -57,10 +67,12 @@ class YandexClickDataset:
         path: Union[Path, str],
         filter_queries_without_relevance: bool,
         filter_query_ids: Union[Set, List] = [],
+        document_encoder: Optional[LabelEncoder] = None,
     ):
         self.path = Path(path)
         self.filter_queries_without_relevance = filter_queries_without_relevance
         self.filter_query_ids = set(filter_query_ids)
+        self.document_encoder = document_encoder
 
     def load(self):
         assert self.path.exists(), f"File not found: {self.path}"
@@ -89,6 +101,10 @@ class YandexClickDataset:
                     clicked_doc_ids = set()
                 elif values[2] == CLICK_ACTION:
                     doc_id = unpack_click(*values)
+
+                    if self.document_encoder is not None:
+                        doc_id = self.document_encoder(f"{query_id}:{doc_id}")
+
                     clicked_doc_ids.add(doc_id)
 
         return pd.DataFrame(rows)
