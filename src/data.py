@@ -80,7 +80,6 @@ class YandexClickDataset:
         total_lines = count_lines(self.path)
         rows = []
         query_id = None
-        should_store_query = False
 
         with open(self.path, "r") as f:
             for line in tqdm(f, total=total_lines):
@@ -95,6 +94,14 @@ class YandexClickDataset:
 
                     if has_previous_query and should_store_query:
                         click = [d in clicked_doc_ids for d in doc_ids]
+
+                        if self.document_encoder is not None:
+                            # Label encode documents
+                            doc_ids = [
+                                self.document_encoder(f"{query_id}:{doc_id}")
+                                for doc_id in doc_ids
+                            ]
+
                         row = {"query_id": query_id, "doc_ids": doc_ids, "click": click}
                         rows.append(row)
 
@@ -102,10 +109,6 @@ class YandexClickDataset:
                     clicked_doc_ids = set()
                 elif values[2] == CLICK_ACTION:
                     doc_id = unpack_click(*values)
-
-                    if should_store_query and self.document_encoder is not None:
-                        doc_id = self.document_encoder(f"{query_id}:{doc_id}")
-
                     clicked_doc_ids.add(doc_id)
 
         return pd.DataFrame(rows)

@@ -9,3 +9,6 @@ class LabelEncoder:
             self.max_id += 1
 
         return self.value2id[value]
+
+    def __len__(self):
+        return len(self.value2id)
