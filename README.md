@@ -13,7 +13,7 @@ Statistics for the subset of queries that also have relevance annotations:
 ### Click dataset
 - \# of search queries: 37,469,405
 - \# of unique search queries: 4,991
-- \# of unique documents: 258,393
+- \# of unique documents: 296,607
 - \# of documents per query (min | median | max): 10 | 10 | 10
 
 ### Relevance dataset
