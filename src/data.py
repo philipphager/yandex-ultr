@@ -84,13 +84,13 @@ class YandexClickDataset:
         with open(self.path, "r") as f:
             for line in tqdm(f, total=total_lines):
                 values = line.rstrip().split("\t")
+                should_store_query = (
+                        query_id in self.filter_query_ids
+                        or not self.filter_queries_without_relevance
+                )
 
                 if values[2] == QUERY_ACTION:
                     has_previous_query = query_id is not None
-                    should_store_query = (
-                        query_id in self.filter_query_ids
-                        or not self.filter_queries_without_relevance
-                    )
 
                     if has_previous_query and should_store_query:
                         click = [d in clicked_doc_ids for d in doc_ids]
@@ -102,7 +102,7 @@ class YandexClickDataset:
                 elif values[2] == CLICK_ACTION:
                     doc_id = unpack_click(*values)
 
-                    if self.document_encoder is not None:
+                    if self.document_encoder is not None and should_store_query:
                         doc_id = self.document_encoder(f"{query_id}:{doc_id}")
 
                     clicked_doc_ids.add(doc_id)
