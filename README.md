@@ -15,7 +15,7 @@ Statistics for the subset of queries that also have relevance annotations:
 - \# of unique search queries: 4,991
 - \# of unique documents: 296,607
 - \# of documents per query (min | median | max): 10 | 10 | 10
-- \x of document-level clicks: 32,924,204
+- \# of document-level clicks: 32,924,204
 - \# of document-level impressions: 262,143,872
 
 ### Relevance dataset
